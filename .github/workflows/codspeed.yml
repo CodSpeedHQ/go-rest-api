@@ -64,4 +64,5 @@ jobs:
         uses: CodSpeedHQ/action@v4
         with:
           mode: walltime
-          run: echo "Running benchmarks..."
+          runner-version: latest
+          run: go test -bench=. ./benchmarks/...
