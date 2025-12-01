@@ -1,0 +1,29 @@
+name: CodSpeed Performance Benchmarks
+on:
+  push:
+    branches:
+      - master
+  pull_request: null
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  benchmarks:
+    name: Run Go Benchmarks with CodSpeed
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.13"
+      - name: Get dependencies
+        run: |
+          go mod download
+          go mod verify
+      - name: Run benchmarks with CodSpeed
+        uses: CodSpeedHQ/action@v4.4.1
+        with:
+          upload-url: ${{ secrets.CODSPEED_STAGING_UPLOAD_URL }}
+          run: go test -bench=. -benchmem ./...
